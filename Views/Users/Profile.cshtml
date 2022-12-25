@@ -1,0 +1,16 @@
+﻿@model User
+
+
+<div style="text-align:center;" class=" row justify-content-center">
+    <h1>@Model.Name</h1>
+    <div class="card" style="width: 14rem;">
+        @if (Model.QrCode != null && Model.QrCode.Length > 0)
+        {
+            <img src="data:image\/*;base64,@(Convert.ToBase64String(Model.QrCode))">
+        }
+        else 
+        {
+            <img src="~/Untitled.png">
+        }
+    </div>
+</div>

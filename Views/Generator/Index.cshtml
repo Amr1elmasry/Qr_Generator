@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Generate";
+}
+
+<br />
+
+<form asp-controller="Generator" asp-action="Generate">
+    <div class="col-lg-12">Enter Movie Id</div>
+    <br />
+    <div class="d-flex flex-row justify-content-between">
+        <input type="text" name="id" id="id" class="form-control" />
+        <input class="btn btn-primary" type="submit" value="Generate Movie QR" />
+    </div>
+</form>
+<br />
+<br />
+
+@if (!string.IsNullOrEmpty(ViewBag.URL))
+{
+    <div class="col-lg-12">
+        <img src="@ViewBag.URL">
+    </div>
+}
+<br />
+<br />
+<div class="col-lg-12">
+    <a class="btn btn-success" asp-controller="Generator" asp-action="ReadQR">
+        Read QR Code Of The Movie
+    </a>
+</div>
+<br />
+<br />
+@if (!string.IsNullOrEmpty(ViewBag.Movie))
+{
+    <div class="col-lg-12">
+        Qr Code into text  : @ViewBag.Movie
+    </div>
+}

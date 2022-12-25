@@ -1,0 +1,84 @@
+﻿@model IEnumerable<User>
+
+
+@{
+
+    ViewData["Title"] = "Users";
+}
+<div class="d-flex flex-column mb-3">
+    <div class="d-flex justify-content-center mb-3">
+        <a class="btn btn-primary w-25 justify-content-center " asp-action="Create">Create user</a>
+    </div>
+    <form method="post" asp-controller="Generator" asp-action="ReadQR" enctype="multipart/form-data">
+        <div class="input-group">
+            <input type="file" class="form-control" size="2097152" name="QrImage" id="QrImage" accept="image/png" aria-label="Upload">
+            <button class="btn btn-success" type="submit" id="QrImage">Read Qr from image</button>
+        </div>
+    </form>
+</div>
+
+<br />
+<div class="mt-4">
+    @if (!Model.Any())
+    {
+
+        <div class="alert alert-warning" role="alert">
+            <i class="bi bi-patch-exclamation"></i>
+            No Users Found!
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            @foreach (var user in Model)
+            {
+                <div class="card" style="width: 14rem;">
+                    @if (user.QrCode != null && user.QrCode.Length > 0)
+                        {
+                            <img src= "data:image\/*;base64,@(Convert.ToBase64String(@user.QrCode))" >
+                            <div class="card-body">
+                                <div style="text-align:center;" >
+
+                                    <a style="text-decoration:none" asp-action="Profile" asp-route-id=@user.Id> <h5 class="card-title">@user.Name</h5></a>
+                                    <a href="javascript:Generate('@user.Id')" class="btn btn-primary mb-1">
+                                            <i class="bi bi-camera-reels"></i>
+                                            QR
+                                    </a>
+                                    <a class="btn btn-danger" href="data:image\/*;base64,@(Convert.ToBase64String(@user.QrCode))" download="@user.Name _Qr.png">
+                                        Download Qr    
+                                    </a>
+
+
+                                </div>
+                            </div>
+                        }
+                    else
+                    {
+                        <img src="~/Untitled.png">
+                        <div class="card-body">
+                            <div style="text-align:center;">
+                                <a style="text-decoration:none" asp-action="Profile" asp-route-id=@user.Id> <h5 class="card-title">@user.Name</h5></a>
+                                <a href="javascript:Generate('@user.Id')" class="btn btn-primary">
+                                    <i class="bi bi-camera-reels"></i>
+                                    QR
+                                </a>
+                            </div>
+                        </div>
+                    }
+                    
+                </div>  
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        function Generate(id) {
+            $.post("/Generator/Generate/", { id: id })
+                .done(function (data) {
+                    location.reload();
+                });
+        }
+    </script>
+}
